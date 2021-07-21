@@ -1,0 +1,15 @@
+{
+  "name": "s15_static-trees",
+  "version": "1.0.0",
+  "description": "Implementations for static tree data structures and algorithms, based on session 15 of the course on Advanced Data Structures given by Erik Demaine on Spring 2012 on MIT",
+  "repository": "https://github.com/GuiBrandt/mit_ocw_6851",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "GuiBrandt",
+  "license": "MIT",
+  "devDependencies": {
+    "coffeescript": "^2.5.1"
+  }
+}
