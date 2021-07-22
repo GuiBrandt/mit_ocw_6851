@@ -3,6 +3,11 @@
 # Constructs the Euler tour representation for a given binary tree.
 #
 #   T   : a binary tree
+#
+# As a side effect, this function assigns the following metadata on the nodes
+# of the tree:
+#   - 'etrIndex'    : index of the node on the resulting ETR array
+#   - 'depth'       : depth of the node on the tree
 
 module.exports = eulerTour = (T) ->
     etr = []

@@ -16,21 +16,33 @@
 # Linear-time algorithm for constructing the cartesian tree of a given array.
 #
 #   A   : an array of numbers
+#
+# Returns an object { root, mapping } with the root node of the tree and an
+# array corresponding to the nodes created for each element in A.
+# Each node will be assigned its original index as metadata on 'sourceIndex'.
 
 module.exports = cartesianTree = (A) ->
-    root = new Node A[0]
+    mapping = []
+    
+    makeNode = (i) ->
+        node = new Node A[i]
+        node.metadata['sourceIndex'] = i
+        mapping.push node
+        return node
 
-    for n in A[1..]
-        current = new Node n
+    root = makeNode 0
+    
+    for i in [1..A.length - 1]
+        current = makeNode i
 
         # Here we maintain the min-heap property
-        if n < root.$
+        if A[i] < root.$
             # We may have to go arbitrarily up the tree, but after we do that
             # every node we traversed becomes part of the left subtree, which
             # we don't care about anymore, so we can charge this traversal on
             # the following reduction of the number of nodes on the right
             # spine, giving an amortized constant cost on this branch
-            while root.parent != null and n < root.parent.$  
+            while root.parent != null and A[i] < root.parent.$  
                 root = root.parent
             
             if root.parent != null
@@ -38,17 +50,14 @@ module.exports = cartesianTree = (A) ->
                 root.parent.right = current
 
             current.left = root
-            root = current
 
         # Otherwise, essentially what we do is put the node on the left
         # subtree if it's empty and grow the right spine otherwise.
-        else if root.left != null
+        else
             assert root.right == null
             root.right = current
-            root = current
 
-        else
-            root.left = current
+        root = current
 
     # In the end, the "root" is going to be the rightmost node on the tree, so
     # we have to go back to the actual root of the tree. This takes at most
@@ -56,7 +65,7 @@ module.exports = cartesianTree = (A) ->
     while root.parent != null
         root = root.parent
 
-    return root
+    return { root, mapping }
 
 
 # Nifty binary tree node object that automatically assigns parent pointers.
