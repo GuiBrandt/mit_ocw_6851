@@ -103,10 +103,7 @@ module.exports.UnitDistanceRMQ = class UnitDistanceRMQ
         leftCenter = Math.ceil(i / @chunkSize)
         right = Math.floor(j / @chunkSize)
 
-        if left == leftCenter or leftCenter > right
-            center = left
-        else
-            center = @summaryRMQ.rangeMinimum leftCenter, right
+        center = @summaryRMQ.rangeMinimum leftCenter, right
 
         argminLeft = left * @chunkSize +
             @_doLookup @chunks[left].type,
@@ -164,13 +161,11 @@ module.exports.UnitDistanceRMQ = class UnitDistanceRMQ
         # it's essentially free for our purposes.
         @lookup = []
         for type from generate @chunkSize
-            console.log type
             rmq = new SimpleRMQ type
             lookup = []
             for i in [0..type.length - 1]
-                lookup[i] = []
-                for j in [i..type.length - 1]
-                    lookup[i].push(rmq.rangeMinimum i, j)
+                lookup[i] = for j in [i..type.length - 1]
+                    rmq.rangeMinimum i, j
             @lookup.push lookup
 
         # Finally, we tag each chunk with it's correspoding "type", to make
